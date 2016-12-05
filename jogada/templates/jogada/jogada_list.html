@@ -1,0 +1,11 @@
+<h1>Jogadas</h1>
+<ul>
+    {% for jogada in object_list %}
+    <li>{{ jogada.autor.username }} vs {{ jogada.adversario.username }} - L{{jogada.linha}} C{{jogada.coluna}} - Acerto {{jogada.acerto}}
+    <a href="{% url 'jogada:jogada_edit' jogada.id %}">edit</a>
+    <a href="{% url 'jogada:jogada_delete' jogada.id %}">delete</a>
+    </li>
+    {% endfor %}
+</ul>
+
+<a href="{% url 'jogada:jogada_new' %}">New</a>
