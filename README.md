@@ -1,3 +1,6 @@
+Referência: https://github.com/rayed/django_crud
+
+
 # Django CRUD Example Apps
 
 This is a small Django project to demonstrate Django CRUD functionality, it
