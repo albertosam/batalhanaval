@@ -1,4 +1,22 @@
-<form method="post">{% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Submit" />
-</form>
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+    {% if messages %}
+        {% for message in messages %}
+        <div style="color: red">
+            <span>{{message}}</span>
+        </div>            
+        {% endfor %}
+    {% endif %}
+
+
+
+    <h3>Nova Jogada</h3>
+    <form method="post">{% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Submit" />
+    </form>            
+
+{% endblock %}

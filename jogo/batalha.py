@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from jogo.models import Jogo, Tabuleiro, Posicao
+from jogada.models import Jogada
 
 class BatalhaNaval(object):
     def __init__(self):
@@ -14,7 +15,7 @@ class BatalhaNaval(object):
 
         for posI in range(tab.tamanho):
             for posJ in range(tab.tamanho):
-                if (posI == 1 and posJ == 1) or (posI == 2 and posJ == 2) or (posI == 3 and posJ == 3):
+                if (posI == 1 and posJ == 1) or (posI == 2 and posJ == 2) or (posI == 3 and posJ == 3) or (posI == 4 and posJ == 4):
                     barco = True
                 else:
                     barco = False
@@ -27,7 +28,7 @@ class BatalhaNaval(object):
         tabuleiro = Tabuleiro.objects.get(jogo=jogada.jogo)
 
         # define posição como verificada e se é um acerto
-        posicao = get_object_or_404(Posicao, tabuleiro=tabuleiro, linha=jogada.linha, coluna=jogada.coluna)
+        posicao = Posicao.objects.get(tabuleiro=tabuleiro, linha=jogada.linha, coluna=jogada.coluna)
         posicao.verificado = True
         if posicao.barco == True:
             posicao.acerto = True
@@ -39,12 +40,31 @@ class BatalhaNaval(object):
         jogada.save()
 
     def permiteJogada(self, jogada):
-        autor = jogada.autor      
+        if not self.verificarQtdeJogadas(jogada):
+            return "Jogador já utilizou todas as suas jogadas ", jogada.jogo.pk, jogada.autor.pk, jogada.jogo.jogador1.pk
         
-        if jogada.jogo.jogadasJogador1 < jogada.jogo.jogadasMaxima:
-            return  True
+        if self.verificarJogadaRealizada(jogada):
+            return "Esta jogada já foi realizada"
+        
+        return ""
+    
+    def verificarQtdeJogadas(self, jogada):
+        qtde = 0
+        # verifica quem é o autor da jogada
+        if jogada.autor.pk == jogada.jogo.jogador1.pk:
+            qtde = jogada.jogo.jogadasJogador1 
+        else:             
+            qtde = jogada.jogo.jogadasJogador2            
+
+        if qtde < jogada.jogo.jogadasMaxima:
+            return True
         else:
             return False
+
+    def verificarJogadaRealizada(self, jogada):
+        jogadaArmazenada = Jogada.objects.filter(jogo=jogada.jogo).filter(linha=jogada.linha).filter(coluna=jogada.coluna)
+        
+        return jogadaArmazenada
 
     def jogoAtualizar(self, jogada):
         jogador = jogada.autor
@@ -57,19 +77,6 @@ class BatalhaNaval(object):
                 
         jogo.save()
 
-    def atualizar(self, jogada):
-
-        if self.permiteJogada(jogada):
-            self.tabuleiroAtualizar(jogada)
-            self.jogoAtualizar(jogada)
-
-    def getMatriz(self, jogo):
-        tabuleiro = get_object_or_404(Tabuleiro, jogo=jogo)
-        posicoes = Posicao.objects.filter(tabuleiro=tabuleiro)
-    	
-        matriz = [[Posicao() for i in range(5)] for j in range(5)]
-
-        for pos in posicoes:
-            matriz[pos.linha][pos.coluna].barco = True
-
-        return matriz
+    def atualizar(self, jogada):        
+        self.tabuleiroAtualizar(jogada)
+        self.jogoAtualizar(jogada)
