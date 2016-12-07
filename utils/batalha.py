@@ -3,12 +3,14 @@ from django.utils import timezone
 from jogo.models import Jogo, Tabuleiro, Posicao
 from jogada.models import Jogada
 
+TAMANHO = 5
+
 class BatalhaNaval(object):
     def __init__(self):
         self.tabuleiro = {}
 
     def tabuleiroGerar(self, jogo):
-        tab = Tabuleiro(jogo=jogo, tamanho=5)
+        tab = Tabuleiro(jogo=jogo, tamanho=TAMANHO)
         tab.save()
 
         barco = False
@@ -40,8 +42,11 @@ class BatalhaNaval(object):
         jogada.save()
 
     def permiteJogada(self, jogada):
+        if int(jogada.linha) >= TAMANHO or int(jogada.coluna) >= TAMANHO:
+            return "Posição excede tamanho do tabuleiro ", TAMANHO-1
+
         if not self.verificarQtdeJogadas(jogada):
-            return "Jogador já utilizou todas as suas jogadas ", jogada.jogo.pk, jogada.autor.pk, jogada.jogo.jogador1.pk
+            return "Jogador já utilizou todas as suas jogadas ", str(jogada.jogo.jogador1), str(jogada.jogo.jogador2)
         
         if self.verificarJogadaRealizada(jogada):
             return "Esta jogada já foi realizada"
@@ -54,7 +59,7 @@ class BatalhaNaval(object):
         if jogada.autor.pk == jogada.jogo.jogador1.pk:
             qtde = jogada.jogo.jogadasJogador1 
         else:             
-            qtde = jogada.jogo.jogadasJogador2            
+            qtde = jogada.jogo.jogadasJogador2
 
         if qtde < jogada.jogo.jogadasMaxima:
             return True

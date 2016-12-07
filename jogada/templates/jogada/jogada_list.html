@@ -12,8 +12,9 @@
 
 
     <h3>Jogadas</h3>
-
-    <a href="{% url 'jogada:jogada_new' %}">Novo</a>            
+    
+    <a href="{% url 'jogada:jogada_new' jogoId %}">new</a>    
+    
     <table>
         <tr>
             <th>Jogo</th>
@@ -30,9 +31,9 @@
             <td> {{ jogada.linha }} </td>
             <td> {{ jogada.coluna }} </td>
             <td> {{ jogada.acerto }} </td>
-            <td>
-                <a href="{% url 'jogada:jogada_edit' jogada.id %}">edit</a>
-                <a href="{% url 'jogada:jogada_delete' jogada.id %}">delete
+            <td>                
+                <a href="{% url 'jogada:jogada_edit' jogada.jogo.id jogada.id %}">edit</a>
+                <a href="{% url 'jogada:jogada_delete' jogada.jogo.id jogada.id %}">delete
             </td>
         </tr>
         {% endfor %}

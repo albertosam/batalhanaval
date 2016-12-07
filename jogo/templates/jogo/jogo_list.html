@@ -1,12 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
 <h1>Jogos</h1>
 <ul>
     {% for jogo in object_list %}
     <li>{{ jogo.jogador1.username }} vs {{ jogo.jogador2.username }}
     <a href="{% url 'jogo:jogo_edit' jogo.id %}">edit</a>
     <a href="{% url 'jogo:jogo_delete' jogo.id %}">delete</a>
-    <a href="{% url 'jogo:jogo_jogadas' %}">jogadas</a>
+    <a href="{% url 'jogo:jogo_jogadas' jogo.id %}">jogadas</a>
     </li>
     {% endfor %}
 </ul>
 
 <a href="{% url 'jogo:jogo_new' %}">New</a>
+
+{% endblock %}
