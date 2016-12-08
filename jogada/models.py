@@ -13,4 +13,4 @@ class Jogada(models.Model):
 	acerto = models.BooleanField(default=False)
 
 	def __str__(self):
-		return "Jogada de " + self.autor.username + " realizada no dia " + self.registro.strftime('%d %B %Y') + " : linha " + self.linha + ", coluna " + self.coluna
+		return "Jogada de " + self.autor.username + " realizada no dia " + self.registro.strftime('%d %B %Y') + " : linha " + self.linha + ", coluna " + self.coluna + ", acerto: " + str(self.acerto) 

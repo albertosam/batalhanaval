@@ -38,9 +38,6 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'books_cbv',
-    'books_fbv',
-    'books_fbv_user',
     'jogo',
     'jogada'
 )

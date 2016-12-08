@@ -80,8 +80,29 @@ class BatalhaNaval(object):
         else:
             jogo.jogadasJogador2 += 1
                 
-        jogo.save()
+        jogo.save()            
+
+    def atualizarVencedor(self, jogada):
+        jogoAtual = Jogo.objects.get(pk=jogada.jogo.id)
+        
+        acertosJogador1 = 0
+        acertosJogador2 = 0 
+        # se não há mais jogadas disponíveis
+        if jogoAtual.jogadasJogador1 == jogoAtual.jogadasMaxima and jogoAtual.jogadasJogador2 == jogoAtual.jogadasMaxima:
+            acertosJogador1 = len(Jogada.objects.filter(jogo_id=jogoAtual.id).filter(autor_id=jogoAtual.jogador1.id).filter(acerto=True))
+            acertosJogador2 = len(Jogada.objects.filter(jogo_id=jogoAtual.id).filter(autor_id=jogoAtual.jogador2.id).filter(acerto=True))
+
+            jogoAtual.finalizado = True
+            if acertosJogador1 == acertosJogador2:
+                jogoAtual.vencedor = None
+            elif acertosJogador1 > acertosJogador2:
+                jogoAtual.vencedor = jogoAtual.jogador1
+            else:
+                jogoAtual.vencedor = jogoAtual.jogador2
+            
+            jogoAtual.save()
 
     def atualizar(self, jogada):        
         self.tabuleiroAtualizar(jogada)
         self.jogoAtualizar(jogada)
+        self.atualizarVencedor(jogada)

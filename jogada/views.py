@@ -20,7 +20,10 @@ def jogada_list(request, jogoId, template_name='jogada/jogada_list.html'):
     jogada = Jogada.objects.filter(jogo_id=jogoId)
     data = {}
     data['object_list'] = jogada
-    data['jogoId'] = int(jogoId)
+    data['jogoId'] = int(jogoId)    
+
+    jogo = Jogo.objects.get(id=jogoId)
+    data['jogo'] = jogo
 
     return render(request, template_name, data)
 
@@ -33,11 +36,11 @@ def jogada_create(request, jogoId, template_name='jogada/jogada_form.html'):
         form.registro = timezone.now()
         jogada = form.save(commit=False)
         jogada.jogo = jogoAtual                 # define jogo da url
-        jogada.autor = request.user             # define autor usuário logado
+        jogada.autor = request.user             # define autor usuário logado        
         resultado = BatalhaNaval().permiteJogada(jogada)
         if resultado == "":
             jogada.save()
-            BatalhaNaval().atualizar(jogada)
+            BatalhaNaval().atualizar(jogada)            
 
             return redirect('jogada:jogada_list', jogoId)
         else:

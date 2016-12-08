@@ -12,7 +12,14 @@
 
 
     <h3>Jogadas</h3>
-    
+
+    {%  if jogo.vencedor %}
+
+        O vencedor é <b>{{jogo.vencedor.username}}</b>!!! <br/><br/>
+
+    {%  endif %}
+
+        
     <a href="{% url 'jogada:jogada_new' jogoId %}">new</a>    
     
     <table>
@@ -32,8 +39,7 @@
             <td> {{ jogada.coluna }} </td>
             <td> {{ jogada.acerto }} </td>
             <td>                
-                <a href="{% url 'jogada:jogada_edit' jogada.jogo.id jogada.id %}">edit</a>
-                <a href="{% url 'jogada:jogada_delete' jogada.jogo.id jogada.id %}">delete
+                
             </td>
         </tr>
         {% endfor %}

@@ -49,18 +49,3 @@ def jogo_delete(request, pk, template_name='jogo/jogo_confirm_delete.html'):
         jogo.delete()
         return redirect('jogo:jogo_list')
     return render(request, template_name, {'object':jogo})
-
-def jogo_matriz(request, pk, template_name='jogo/jogo_matriz.html'):    
-    jogo= get_object_or_404(Jogo, pk=pk)
-    matriz= BatalhaNaval().getMatriz(jogo)
-
-    linhas = [i for i in range(5)]
-    colunas = [i for i in range(5)]
-
-    data = {}
-    data['object_list'] = matriz
-    data['linhas'] = linhas
-    data['colunas'] = colunas    
-    data['qtde'] = str(matriz[1][4])
-    
-    return render(request, template_name, data)

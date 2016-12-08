@@ -12,10 +12,10 @@ class Jogo(models.Model):
 	jogadasMaxima = models.IntegerField(default=0)
 	jogadasJogador1 = models.IntegerField(default=0)
 	jogadasJogador2 = models.IntegerField(default=0)
-	vencendor = models.ForeignKey(User, related_name="vencedor", null=True)
+	vencedor = models.ForeignKey(User, related_name="vencedor", null=True)
 
 	def __str__(self):
-		return "Jogo jogador1: " + self.jogador1.username + " vs jogador2:" + self.jogador2.username + ". Qtd Jogadas: " + str(self.jogadasMaxima) + ". Qtde Jog 1: " + str(self.jogadasJogador1) + ". Qtde Jog 2: " + str(self.jogadasJogador2)
+		return "Jogo jogador1: " + self.jogador1.username + " vs jogador2:" + self.jogador2.username + ". Qtd Jogadas: " + str(self.jogadasMaxima) + ". Qtde Jog 1: " + str(self.jogadasJogador1) + ". Qtde Jog 2: " + str(self.jogadasJogador2) + ", vencedor: " + str(self.vencedor)
 
 class Tabuleiro(models.Model):
     jogo = models.ForeignKey(Jogo, related_name="jogo")
